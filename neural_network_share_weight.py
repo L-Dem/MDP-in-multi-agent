@@ -130,20 +130,16 @@ class NeuralNetworks:
         return tf.Variable(initial)
     
     # =========== Define Networks Structures =========== #
+    '''State ==> FC ==> ReLU ==> Feature'''
     def _create_state_feature(self, sigma=0.1):
-        '''
-        State ==> FC ==> ReLU ==> Feature
-        '''
         x = tf.placeholder(tf.float32, [None, self._S_DIM])
         w = NeuralNetworks.weight_variable([self._S_DIM, self._S_FEATURE_DIM], value=sigma, rand='normal')
         b = NeuralNetworks.bias_variable([self._S_FEATURE_DIM])
         y = tf.nn.relu(tf.matmul(x, w) + b)
         return x, y
-    
+
+    ''' State_Feature ==> FC ==> ReLU ==> FC ==> Tanh ==> Scale ==> Action'''
     def _create_actors(self, feature):
-        '''
-        State_Feature ==> FC ==> ReLU ==> FC ==> Tanh ==> Scale ==> Action
-        '''
         w1 = NeuralNetworks.weight_variable([self._S_FEATURE_DIM, self._ACTOR_H1_DIM])
         b1 = NeuralNetworks.bias_variable([self._ACTOR_H1_DIM])
         h1 = tf.nn.relu(tf.matmul(feature, w1) + b1)
@@ -153,13 +149,14 @@ class NeuralNetworks:
         y = tf.multiply(h2, self._A_BOUND)
         return y
 
-    def _create_critics(self, s_feature, action):
-        '''
+    '''
         Hidden Layer: 
             H1 = State_Feature * W1s + Action * W1a + Bias
         Critic:
             H1 ==> ReLU ==> FC ==> Value
-        '''
+    '''
+    def _create_critics(self, s_feature, action):
+
         w1_s = NeuralNetworks.weight_variable([self._S_FEATURE_DIM, self._CRITIC_H1_DIM], value=0.3, rand='normal')
         w1_a = NeuralNetworks.weight_variable([self._A_DIM, self._CRITIC_H1_DIM])
         b1 = NeuralNetworks.bias_variable([self._CRITIC_H1_DIM], value=0.0)
