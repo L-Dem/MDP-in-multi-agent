@@ -62,8 +62,8 @@ RESULTS_FILE = './results/rewards.npz'
 MODEL_DIR = './results/model'
 RANDOM_SEED = 1234
 # Size of replay buffer
-BUFFER_SIZE = 1000  # 1000
-MINIBATCH_SIZE = 100  # 128
+BUFFER_SIZE = 5000  # 1000
+MINIBATCH_SIZE = 1000  # 128
 
 
 class Actor:
@@ -226,7 +226,7 @@ def init_network(target_x, target_y, s_dim, a_dim, init_buffer):  # rewrite to i
             distance = (math.sqrt(pow(target_x - i, 2) + pow(target_y - j, 2)))
             if distance == 0:
                 distance = 0.1
-            r = 100 / distance
+            r = agent.REWARD / distance
             if i == width and j == width:
                 t = True
             else:
@@ -282,7 +282,7 @@ def train(sess, env, network_all):  # all agent train together
         critic_target[num].train()
 
         # init every network
-        init_buffer = ReplayBuffer(100*100, RANDOM_SEED)
+        init_buffer = ReplayBuffer(BUFFER_SIZE, RANDOM_SEED)
         init_s, init_a, init_r, init_t, init_s2 = init_network(
             agent.TARGET_X, agent.TARGET_Y, s_dim_init, a_dim_init, init_buffer)
         _ = critic_target[num].predict(init_s, actor_target[num].predict(init_s2))

@@ -7,7 +7,7 @@ import math
 
 TARGET_X = 225
 TARGET_Y = 225
-REWARD = 2000
+REWARD = 200
 STATE_WIDTH = 450
 
 
