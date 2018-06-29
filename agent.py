@@ -8,6 +8,7 @@ import math
 TARGET_X = 225
 TARGET_Y = 225
 REWARD = 2000
+STATE_WIDTH = 450
 
 
 class Agent(object):  # single agent
@@ -22,7 +23,7 @@ class Agent(object):  # single agent
         self.in_Y_max = 450
         self.positionX = random.uniform(self.in_X_min, self.in_X_max)  # initial position
         self.positionY = random.uniform(self.in_Y_min, self.in_Y_max)
-        self.stateWidth = 450  # window width
+        self.stateWidth = STATE_WIDTH  # window width
         self.r_ob = 10  # obstacle radius
         self.r_arr = 30  # distance to the neighbour which is arrived (target)
         self.r_com = 100  # communicate radius

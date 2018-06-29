@@ -216,17 +216,18 @@ def build_summaries():
 # ===========================
 
 
-def init_network(target_x, target_y, s_dim, a_dim, init_buffer):
+def init_network(target_x, target_y, s_dim, a_dim, init_buffer):  # rewrite to init potential function
     # init_buffer = ReplayBuffer(100*100, 123)
-    for i in range(0, 500, 5):
-        for j in range(0, 500, 5):
-            s = [i, j, 0, 0]
-            a = [(target_x - i)/5, (target_y - j)/5]
+    width = agent.STATE_WIDTH
+    for i in range(0, width, 1):
+        for j in range(0, width, 1):
+            s = [i, j, 0, 0]  # position_x, position_y, distance_obstacle_x, distance_obstacle_y
+            a = [(target_x - i)/5, (target_y - j)/5]  # velocity_x, velocity_y
             distance = (math.sqrt(pow(target_x - i, 2) + pow(target_y - j, 2)))
             if distance == 0:
-                distance = 1
+                distance = 0.1
             r = 100 / distance
-            if i == target_x and j == target_y:
+            if i == width and j == width:
                 t = True
             else:
                 t = False
